@@ -1,0 +1,51 @@
+{
+  "name": "podcast",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "vite",
+    "server": "vite build && wrangler dev --port 8787",
+    "start": "concurrently -k -n server,web -c magenta,cyan \"npm:server\" \"npm:dev\"",
+    "build": "vite build",
+    "typecheck": "tsc -b",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "deploy": "vite build && wrangler deploy",
+    "db:migrate:local": "wrangler d1 migrations apply podcast-db --local",
+    "db:seed:local": "wrangler d1 execute podcast-db --local --file=database/seed.sql",
+    "db:migrate:remote": "wrangler d1 migrations apply podcast-db --remote",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/nunito": "^5.3.0",
+    "@hono/zod-validator": "^0.9.1",
+    "aws4fetch": "^1.0.20",
+    "hono": "^4.13.22",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router": "^7.0.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261123.1",
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "concurrently": "^9.0.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.0.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0",
+    "vite": "^6.0.0",
+    "vitest": "^5.1.1",
+    "wrangler": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

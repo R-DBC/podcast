@@ -1,0 +1,55 @@
+# Un seul Worker : front React (assets statiques) + API Hono.
+name = "podcast"
+main = "server/index.ts"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Sécurité : pas d'URL *.workers.dev ni de preview publique,
+# sinon /admin serait joignable en contournant Cloudflare Access.
+workers_dev = true
+preview_urls = false
+
+[observability]
+enabled = true
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+run_worker_first = ["/api/*", "/rss.xml", "/sitemap.xml", "/episodes/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "podcast-db"
+database_id = "9dcd794f-6bce-4fe9-bbdd-dda9dcd24933"
+migrations_dir = "database/migrations"
+
+[[d2_databases]]
+binding = "DB"
+database_name = "database_lesbecasses"
+database_id = "2f3d18b4-7d06-4b60-8cc6-d750e0752f72"
+migrations_dir = "database/migrations"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "podcast-media"
+
+[vars]
+SITE_URL = "https://exemple.fr"
+MEDIA_BASE_URL = "https://media.exemple.fr"
+OP3_PREFIX = "https://op3.dev/e/"
+R2_BUCKET_NAME = "podcast-media"
+# "access" (Cloudflare Access) ou "basic" (plan B : basic-auth)
+AUTH_MODE = "access"
+ACCESS_TEAM_DOMAIN = "<equipe>.cloudflareaccess.com"
+PODCAST_TITLE = "Les Bécasses"
+PODCAST_DESCRIPTION = "TODO description (Com)"
+PODCAST_AUTHOR = "TODO auteur (Com)"
+PODCAST_OWNER_EMAIL = "contact@exemple.fr"
+PODCAST_IMAGE_URL = "https://media.exemple.fr/cover-3000.jpg"
+PODCAST_CATEGORY = "Society & Culture"
+PODCAST_LANGUAGE = "fr"
+
+# Secrets (wrangler secret put …, jamais ici) — voir .dev.vars.example :
+#   ACCESS_AUD, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY,
+#   BASIC_AUTH_USER, BASIC_AUTH_PASSWORD (plan B uniquement)
